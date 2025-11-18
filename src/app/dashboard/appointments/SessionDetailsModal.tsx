@@ -87,6 +87,7 @@ import {
 
 import { appointmentReceiptService } from '@/services/appointmentReceiptService';
 import AddPrescriptionModal from '@/app/dashboard/my-sessions/AddPrescriptionModal';
+import { queueDisplayService } from '@/services/queueDisplayService';
 
 interface SessionDetailsModalProps {
   doctorName: string;
@@ -358,11 +359,30 @@ export default function SessionDetailsModal({
     };
   }, [doctorName, date, startTime, endTime]); 
 
-  const handleAddPrescription = (appointment: Appointment) => {
+  const handleAddPrescription = async (appointment: Appointment) => {
     // Check if appointment is refunded
     if (appointment.payment?.refunded) {
       toast.error('Cannot add prescription - appointment has been refunded');
       return;
+    }
+    
+    // Track current appointment number for queue display
+    if (appointment.sessionId && appointment.sessionAppointmentNumber !== undefined && appointment.sessionAppointmentNumber !== null) {
+      try {
+        await queueDisplayService.setCurrentAppointment(
+          appointment.sessionId,
+          appointment.sessionAppointmentNumber,
+          appointment.doctorId,
+          appointment.doctorName,
+          appointment.date,
+          startTime,
+          endTime,
+          user?.uid
+        );
+      } catch (error) {
+        console.error('Error updating queue display:', error);
+        // Don't block the modal from opening if queue update fails
+      }
     }
     
     setSelectedAppointmentForPrescription(appointment);
