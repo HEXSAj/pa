@@ -1,0 +1,349 @@
+//changed
+{
+  "rules": {
+    
+    "customers": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["name", "mobile", "updatedAt", "discountPercentage", "createdAt"],
+      "$customer_id": {
+        ".validate": "newData.hasChildren(['name', 'mobile', 'createdAt', 'updatedAt'])"
+      }
+    },
+    
+    "purchases": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": [
+        "supplierId", 
+        "status", 
+        "paymentStatus", 
+        "createdByUid", 
+        "updatedAt"
+      ]
+    },
+      
+    "priceHistory": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["labTestId", "changedBy", "changedAt"]
+    },
+
+    "patients": {
+      ".indexOn": ["contactNumber"],
+      ".read": true,
+      ".write": true
+    },
+      
+    "appointments": {
+      ".indexOn": ["date", "sessionId", "cashierSessionId", "doctorId", "patientId"],
+      ".read": true,
+      ".write": true
+    },
+      
+      "medicineTypes": {
+        ".read": "auth != null",
+        ".write": "auth != null",
+        ".indexOn": ["name", "defaultUnit", "createdAt", "updatedAt"]
+      },
+        
+    "labTests": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["labId", "name", "isActive"]
+    },
+          
+    "labs": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["name", "isActive"]
+    },
+    
+    "doctors": {
+      ".read": true,
+      ".write": "auth != null"
+    },
+    
+    "doctorSchedules": {
+      ".read": true,
+      ".write": "auth != null",
+      ".indexOn": ["doctorId"]
+    },
+
+    "attendance": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": [
+        "staffId", 
+        "date", 
+        "status", 
+        "createdAt", 
+        "updatedAt"
+      ]
+    },
+    
+    "secondarySales": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["createdAt", "customerId"]
+    },
+    
+    "expenses": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": [
+        "date", 
+        "categoryId", 
+        "categoryName", 
+        "amount", 
+        "createdBy", 
+        "updatedAt"
+      ],
+      "$expense_id": {
+        ".validate": "newData.hasChildren(['date', 'amount', 'categoryId', 'categoryName', 'createdAt', 'updatedAt'])"
+      }
+    },
+      
+    "doctor-sessions": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["date", "doctorId", "isArrived", "isDeparted", "updatedAt"]
+    },
+      
+    "secondaryCashierSessions": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["userId"]
+    },
+        
+    "prescriptions": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["appointmentId", "patientId", "doctorId", "createdAt", "updatedAt"]
+    },
+        
+   "doctorProcedures": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["doctorId", "procedureId"]
+    },
+      
+    "medicalProcedures": {
+        ".read": "auth != null",
+        ".write": "auth != null",
+        ".indexOn": ["name", "category", "isActive", "createdAt", "updatedAt"]
+      },
+      
+    "secondaryInventory": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["mainItemId"]
+    },
+    
+    "batches": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": [
+        "itemId", 
+        "purchaseId", 
+        "expiryDate", 
+        "batchNumber", 
+        "supplierId"
+      ]
+    },
+    
+    "sales": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["createdAt", "createdBy/uid"]
+    },
+    
+    "cashierSessions": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["userId", "isActive", "startDate"]
+    },
+    
+    "inventory": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": [
+        "name", 
+        "code", 
+        "type"
+      ]
+    },
+      
+      "prescriptionTags": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      },
+        
+         "savedDiagnoses": {
+        ".read": "auth != null",
+        ".write": "auth != null",
+        ".indexOn": ["text", "usageCount", "lastUsedAt", "createdAt"]
+      },
+
+    "staff": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": [
+        "email", 
+        "role", 
+        "updatedAt", 
+        "createdAt"
+      ]
+    },
+    
+    "suppliers": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": [
+        "name", 
+        "phone", 
+        "email", 
+        "status", 
+        "updatedAt", 
+        "createdAt"
+      ],
+      "$supplier_id": {
+        ".validate": "newData.hasChildren(['name', 'phone', 'status', 'createdAt', 'updatedAt'])"
+      }
+    },
+    
+    "salary_payments": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": [
+        "staffId",
+        "paymentDate",
+        "period",
+        "amount",
+        "paymentMethod",
+        "createdAt"
+      ]
+    },
+    
+    "staff_salaries": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": [
+        "staffId",
+        "baseSalary",
+        "updatedAt",
+        "createdAt"
+      ]
+    },
+    
+    "categories": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["name", "isActive", "updatedAt", "createdAt"]
+    },
+    
+    "stock_adjustments": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["itemId", "batchId", "adjustmentType", "createdAt", "updatedAt"]
+    },
+    
+    "cashDiscrepancies": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["sessionId", "createdAt", "updatedAt"]
+    },
+    
+    "endAmountDiscrepancies": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["sessionId", "createdAt", "updatedAt"]
+    },
+    
+    "medicineTemplates": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["name", "createdAt", "updatedAt"]
+    },
+    
+    "installmentPlans": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["purchaseId", "status", "createdAt", "updatedAt"]
+    },
+    
+    "expense-categories": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["name", "isActive", "createdAt", "updatedAt"]
+    },
+    
+    "cashOutRecords": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["sessionId", "createdAt", "updatedAt"]
+    },
+    
+    "procedures": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["name", "category", "isActive", "createdAt", "updatedAt"]
+    },
+
+    // NEW REFERRAL SYSTEM RULES
+    "referralDoctors": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": [
+        "name", 
+        "specialty", 
+        "isActive", 
+        "hospital", 
+        "createdAt", 
+        "updatedAt"
+      ],
+      "$referralDoctor_id": {
+        ".validate": "newData.hasChildren(['name', 'specialty', 'qualifications', 'isActive', 'createdAt', 'updatedAt'])"
+      }
+    },
+    
+    "referralLetters": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": [
+        "appointmentId", 
+        "patientId", 
+        "referralDoctorId", 
+        "referralDate", 
+        "status", 
+        "patientName", 
+        "patientContact", 
+        "referralDoctorName", 
+        "referralDoctorSpecialty", 
+        "createdAt", 
+        "updatedAt"
+      ],
+      "$referralLetter_id": {
+        ".validate": "newData.hasChildren(['patientId', 'patientName', 'patientContact', 'referralDoctorId', 'referralDoctorName', 'referralDoctorSpecialty', 'referralNote', 'referralDate', 'status', 'createdAt', 'updatedAt'])"
+      }
+    },
+      
+        // NEW MEDICAL TEST RULES
+    "medicalTestTemplates": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["testName", "testType", "category", "isActive", "createdAt", "updatedAt"]
+    },
+    
+    "medicalTestsHistory": {
+      ".read": "auth != null",
+      ".write": "auth != null",
+      ".indexOn": ["patientId", "doctorId", "createdAt"]
+    },
+      
+      "counters": {
+        ".read": "auth != null",
+        ".write": "auth != null"
+      }
+  }
+}

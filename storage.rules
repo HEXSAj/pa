@@ -1,0 +1,67 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Helper function to check if user is uploading their own attendance photo
+    function isOwnAttendancePhoto() {
+      return isAuthenticated() && 
+             resource.metadata.staffId == request.auth.uid;
+    }
+    
+    // Attendance photos - Allow authenticated users to read/write/delete
+    // Photos are organized by date: attendance/YYYY/MM/DD/filename
+    match /attendance/{year}/{month}/{day}/{fileName} {
+      // Allow authenticated users to read attendance photos
+      allow read: if isAuthenticated();
+      
+      // Allow authenticated users to create/update attendance photos
+      // Note: write only applies to create/update, not delete
+      allow write: if isAuthenticated() 
+                   && request.resource.size < 10 * 1024 * 1024  // Max 10MB
+                   && request.resource.contentType.matches('image/.*');
+      
+      // Allow authenticated users to delete attendance photos
+      // This is separate from write because delete operations don't have request.resource
+      allow delete: if isAuthenticated();
+    }
+    
+    // Prescription images - Allow authenticated users to read/write
+    match /prescriptions/{prescriptionId}/{fileName} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Appointment documents - Allow authenticated users to read/write/delete
+    // Documents are organized by appointment ID: appointments/{appointmentId}/{fileName}
+    match /appointments/{appointmentId}/{fileName} {
+      // Allow authenticated users to read appointment documents
+      allow read: if isAuthenticated();
+      
+      // Allow authenticated users to create/update appointment documents
+      // Supports PDFs, images, and common document types up to 10MB
+      // More flexible: allows any file type up to 10MB for authenticated users
+      allow write: if isAuthenticated() 
+                   && request.resource.size < 10 * 1024 * 1024;  // Max 10MB
+      
+      // Allow authenticated users to delete appointment documents
+      allow delete: if isAuthenticated();
+    }
+    
+    // Public bills - Allow read for everyone, write for authenticated users
+    match /public-bills/{fileName} {
+      allow read: if true;  // Public read access
+      allow write: if isAuthenticated();
+    }
+    
+    // Default: Deny all other paths
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
+
